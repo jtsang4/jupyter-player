@@ -5,7 +5,7 @@ A docker image for developing jupyterlab. Both notebook and jupyterlab are insta
 ## Usage
 
 ```shell
-docker run -i -p 8888:8888 -t wtzeng/jlab-dev # mount files by "-v", like "-v $(pwd):/root/data"
+docker run -i -t -p 8888:8888 wtzeng/jlab-dev # mount files by "-v", like "docker run -i -t -p 8888:8888 -v $(pwd):/root/data wtzeng/jlab-dev"
 jupyter lab
 ```
 
