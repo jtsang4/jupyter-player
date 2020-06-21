@@ -1,4 +1,4 @@
-FROM python:buster
+FROM debian:buster
 
 WORKDIR /root
 EXPOSE 8888
@@ -12,14 +12,14 @@ ADD jupyter_notebook_config.py /root
 RUN apt-get update && \
     apt-get install curl vim wget git -y
 
-# Conda and nodejs environment
+# Conda and python, nodejs environment
 RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ${CONDA_INSTALLER_PATH} && \
     bash ${CONDA_INSTALLER_PATH} -p ${CONDA_PATH} -b && \
     rm -f ${CONDA_INSTALLER_PATH} && \
     echo "export PATH=${CONDA_PATH}/bin:$PATH" >> ~/.bashrc
 ENV PATH=${CONDA_PATH}/bin:${PATH}
 RUN conda update -n base -c defaults conda
-RUN conda install -c conda-forge -y nodejs
+RUN conda install -c conda-forge -y python nodejs
 RUN npm install -g yarn
 
 # Notebook
