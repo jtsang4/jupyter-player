@@ -1,15 +1,21 @@
-FROM continuumio/miniconda3
+FROM python:buster
 
 WORKDIR /root
 EXPOSE 8888
+ENV SHELL=/bin/bash
+ARG CONDA_INSTALLER_PATH=/root/install-conda.sh
 
 ADD jupyter_notebook_config.py /root
 
 # Basic environment
 RUN apt-get update && \
-    apt-get install curl vim -y
+    apt-get install curl vim wget git -y
 
 # Conda and nodejs environment
+RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ${CONDA_INSTALLER_PATH} && \
+    bash ${CONDA_INSTALLER_PATH} -p /miniconda -b && \
+    rm -f ${CONDA_INSTALLER_PATH}
+ENV PATH=/miniconda/bin:${PATH}
 RUN conda update -n base -c defaults conda
 RUN conda install -c conda-forge -y nodejs
 RUN npm install -g yarn
