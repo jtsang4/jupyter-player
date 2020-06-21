@@ -4,6 +4,7 @@ WORKDIR /root
 EXPOSE 8888
 ENV SHELL=/bin/bash
 ARG CONDA_INSTALLER_PATH=/root/install-conda.sh
+ARG CONDA_PATH=/miniconda
 
 ADD jupyter_notebook_config.py /root
 
@@ -13,9 +14,10 @@ RUN apt-get update && \
 
 # Conda and nodejs environment
 RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ${CONDA_INSTALLER_PATH} && \
-    bash ${CONDA_INSTALLER_PATH} -p /miniconda -b && \
-    rm -f ${CONDA_INSTALLER_PATH}
-ENV PATH=/miniconda/bin:${PATH}
+    bash ${CONDA_INSTALLER_PATH} -p ${CONDA_PATH} -b && \
+    rm -f ${CONDA_INSTALLER_PATH} && \
+    echo "export PATH=${CONDA_PATH}/bin:$PATH" >> ~/.bashrc
+ENV PATH=${CONDA_PATH}/bin:${PATH}
 RUN conda update -n base -c defaults conda
 RUN conda install -c conda-forge -y nodejs
 RUN npm install -g yarn
